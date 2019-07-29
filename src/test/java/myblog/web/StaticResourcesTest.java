@@ -1,10 +1,12 @@
 package myblog.web;
 
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.CacheControl;
-import org.springframework.test.web.reactive.server.FluxExchangeResult;
+import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import support.version.BlogVersion;
 
@@ -15,6 +17,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class StaticResourcesTest {
+    private static final Logger logger = LoggerFactory.getLogger(StaticResourcesTest.class);
+
     @Autowired
     private WebTestClient client;
 
@@ -24,7 +28,7 @@ public class StaticResourcesTest {
     @Test
     void get_static_resources() {
         String uri = PREFIX_STATIC_RESOURCES + "/" + version.getVersion() + "/js/index.js";
-        FluxExchangeResult<String> response = client
+        EntityExchangeResult<String> response = client
                 .get()
                 .uri(uri)
                 .exchange()
@@ -32,7 +36,10 @@ public class StaticResourcesTest {
                 .isOk()
                 .expectHeader()
                 .cacheControl(CacheControl.maxAge(60 * 60 * 24 * 365, TimeUnit.SECONDS))
-                .returnResult(String.class);
+                .expectBody(String.class)
+                .returnResult();
+
+        logger.debug("body : {}", response.getResponseBody());
 
         String etag = response.getResponseHeaders()
                 .getETag();
@@ -48,7 +55,7 @@ public class StaticResourcesTest {
 
     @Test
     void helloworld() {
-        FluxExchangeResult<String> response = client
+        EntityExchangeResult<String> response = client
                 .get()
                 .uri("/helloworld")
                 .exchange()
@@ -56,7 +63,8 @@ public class StaticResourcesTest {
                 .isOk()
                 .expectHeader()
                 .cacheControl(CacheControl.empty())
-                .returnResult(String.class);
+                .expectBody(String.class)
+                .returnResult();
 
         String etag = response
                 .getResponseHeaders()
