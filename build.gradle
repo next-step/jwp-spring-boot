@@ -5,8 +5,8 @@ plugins {
 
 apply plugin: 'io.spring.dependency-management'
 
-group = 'techcourse'
-version = '0.0.1-SNAPSHOT'
+group = 'myblog'
+version = '1.0.0'
 sourceCompatibility = '1.8'
 
 repositories {
