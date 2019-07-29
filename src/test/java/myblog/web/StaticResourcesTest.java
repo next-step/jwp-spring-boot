@@ -10,6 +10,9 @@ import support.version.BlogVersion;
 
 import java.util.concurrent.TimeUnit;
 
+import static myblog.WebMvcConfig.PREFIX_STATIC_RESOURCES;
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class StaticResourcesTest {
     @Autowired
@@ -20,7 +23,7 @@ public class StaticResourcesTest {
 
     @Test
     void get_static_resources() {
-        String uri = "/resources/" + version.getVersion() + "/js/index.js";
+        String uri = PREFIX_STATIC_RESOURCES + "/" + version.getVersion() + "/js/index.js";
         FluxExchangeResult<String> response = client
                 .get()
                 .uri(uri)
@@ -41,5 +44,24 @@ public class StaticResourcesTest {
                 .exchange()
                 .expectStatus()
                 .isNotModified();
+    }
+
+    @Test
+    void helloworld() {
+        FluxExchangeResult<String> response = client
+                .get()
+                .uri("/helloworld")
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectHeader()
+                .cacheControl(CacheControl.empty())
+                .returnResult(String.class);
+
+        String etag = response
+                .getResponseHeaders()
+                .getETag();
+
+        assertThat(etag).isNull();
     }
 }
