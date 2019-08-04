@@ -2,3 +2,6 @@ server:
   tomcat:
     accept-count: 100
     max-threads: 200
+
+handlebars:
+  suffix: .html
