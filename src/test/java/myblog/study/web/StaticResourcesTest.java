@@ -1,4 +1,4 @@
-package myblog.web;
+package myblog.study.web;
 
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
