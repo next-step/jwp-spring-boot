@@ -31,8 +31,9 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable int id,
-                                       @RequestBody UserUpdatedDto userUpdatedDto) {
+    public ResponseEntity<Void> update(
+            @PathVariable int id,
+            @RequestBody UserUpdatedDto userUpdatedDto) {
         logger.debug("Updated User : {}", userUpdatedDto);
         UserRepository.update(id, userUpdatedDto);
         return ResponseEntity.ok().build();

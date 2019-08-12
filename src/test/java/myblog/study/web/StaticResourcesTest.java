@@ -28,15 +28,15 @@ public class StaticResourcesTest extends AcceptanceTest {
     void get_static_resources() {
         String uri = PREFIX_STATIC_RESOURCES + "/" + version.getVersion() + "/js/index.js";
         EntityExchangeResult<String> response = client
-                    .get()
-                    .uri(uri)
+                .get()
+                .uri(uri)
                 .exchange()
-                    .expectStatus()
-                        .isOk()
-                    .expectHeader()
-                        .cacheControl(CacheControl.maxAge(60 * 60 * 24 * 365, TimeUnit.SECONDS))
-                    .expectBody(String.class)
-                        .returnResult();
+                .expectStatus()
+                .isOk()
+                .expectHeader()
+                .cacheControl(CacheControl.maxAge(60 * 60 * 24 * 365, TimeUnit.SECONDS))
+                .expectBody(String.class)
+                .returnResult();
 
         logger.debug("body : {}", response.getResponseBody());
 
@@ -44,26 +44,26 @@ public class StaticResourcesTest extends AcceptanceTest {
                 .getETag();
 
         client
-                    .get()
-                    .uri(uri)
-                    .header("If-None-Match", etag)
+                .get()
+                .uri(uri)
+                .header("If-None-Match", etag)
                 .exchange()
-                    .expectStatus()
-                        .isNotModified();
+                .expectStatus()
+                .isNotModified();
     }
 
     @Test
     void helloworld() {
         EntityExchangeResult<String> response = client
-                    .get()
-                    .uri("/helloworld")
+                .get()
+                .uri("/helloworld")
                 .exchange()
-                    .expectStatus()
-                        .isOk()
-                    .expectHeader()
-                        .cacheControl(CacheControl.empty())
-                    .expectBody(String.class)
-                        .returnResult();
+                .expectStatus()
+                .isOk()
+                .expectHeader()
+                .cacheControl(CacheControl.empty())
+                .expectBody(String.class)
+                .returnResult();
 
         String etag = response
                 .getResponseHeaders()

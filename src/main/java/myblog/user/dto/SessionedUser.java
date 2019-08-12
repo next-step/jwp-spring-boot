@@ -9,7 +9,8 @@ public class SessionedUser {
 
     private String userId;
 
-    private SessionedUser() {}
+    private SessionedUser() {
+    }
 
     public SessionedUser(int id, String userId) {
         this.id = id;
@@ -25,13 +26,26 @@ public class SessionedUser {
     }
 
     public boolean isGuest() {
-        return true;
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "SessionedUser{" +
+                "id=" + id +
+                ", userId='" + userId + '\'' +
+                '}';
     }
 
     private static class GuestUser extends SessionedUser {
         @Override
         public boolean isGuest() {
-            return false;
+            return true;
+        }
+
+        @Override
+        public String toString() {
+            return "GuestUser";
         }
     }
 }

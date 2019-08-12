@@ -25,15 +25,13 @@ public class LoginUserHandlerMethodArgumentResolver implements HandlerMethodArgu
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         LoginUser loginUserAnnotation = parameter.getParameterAnnotation(LoginUser.class);
 
-        Object maybeSessionedUser = webRequest.getAttribute(
+        SessionedUser sessionedUser = (SessionedUser) webRequest.getAttribute(
                 SessionedUser.SESSIONED_USER_KEY,
                 NativeWebRequest.SCOPE_SESSION);
-        if (loginUserAnnotation.required() && maybeSessionedUser == null) {
+        logger.debug("@LoginUser : {}", sessionedUser);
+        if (loginUserAnnotation.required() && sessionedUser.isGuest()) {
             throw new LoginRequiredException();
         }
-
-        SessionedUser sessionedUser = (SessionedUser)maybeSessionedUser;
-        logger.debug("@LoginUser : {}", sessionedUser);
 
         return sessionedUser;
     }

@@ -45,8 +45,8 @@ public class LoginUserHandlerMethodArgumentResolverTest {
 
     @Test
     public void loginUserRequired_but_guest() {
-        when(parameter.getParameterAnnotation(LoginUser.class)).thenReturn( new FakeLoginUser(true));
-        when(webRequest.getAttribute(SessionedUser.SESSIONED_USER_KEY, NativeWebRequest.SCOPE_SESSION)).thenReturn(null);
+        when(parameter.getParameterAnnotation(LoginUser.class)).thenReturn(new FakeLoginUser(true));
+        when(webRequest.getAttribute(SessionedUser.SESSIONED_USER_KEY, NativeWebRequest.SCOPE_SESSION)).thenReturn(SessionedUser.GUEST);
 
         assertThatThrownBy(() -> {
             loginUserHandlerMethodArgumentResolver.resolveArgument(parameter, null, webRequest, null);
@@ -55,20 +55,20 @@ public class LoginUserHandlerMethodArgumentResolverTest {
 
     @Test
     public void loginUser_not_required() throws Exception {
-        when(parameter.getParameterAnnotation(LoginUser.class)).thenReturn( new FakeLoginUser(false));
+        when(parameter.getParameterAnnotation(LoginUser.class)).thenReturn(new FakeLoginUser(false));
         when(webRequest.getAttribute(SessionedUser.SESSIONED_USER_KEY, NativeWebRequest.SCOPE_SESSION)).thenReturn(SessionedUser.GUEST);
 
-        SessionedUser sessionedUser = (SessionedUser)loginUserHandlerMethodArgumentResolver.resolveArgument(parameter, null, webRequest, null);
+        SessionedUser sessionedUser = (SessionedUser) loginUserHandlerMethodArgumentResolver.resolveArgument(parameter, null, webRequest, null);
         assertThat(sessionedUser).isEqualTo(SessionedUser.GUEST);
     }
 
     @Test
     public void loginUser_일반상황() throws Exception {
         SessionedUser expected = new SessionedUser(1, "javajigi");
-        when(parameter.getParameterAnnotation(LoginUser.class)).thenReturn( new FakeLoginUser(false));
+        when(parameter.getParameterAnnotation(LoginUser.class)).thenReturn(new FakeLoginUser(true));
         when(webRequest.getAttribute(SessionedUser.SESSIONED_USER_KEY, NativeWebRequest.SCOPE_SESSION)).thenReturn(expected);
 
-        SessionedUser actual = (SessionedUser)loginUserHandlerMethodArgumentResolver.resolveArgument(parameter, null, webRequest, null);
+        SessionedUser actual = (SessionedUser) loginUserHandlerMethodArgumentResolver.resolveArgument(parameter, null, webRequest, null);
         assertThat(actual).isEqualTo(expected);
     }
 
