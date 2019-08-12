@@ -1,23 +1,15 @@
 package myblog.user.dto;
 
-public class UserDto {
-    private long id;
-
+public class UserUpdatedDto {
     private String userId;
-
     private String email;
 
-    private UserDto() {
+    private UserUpdatedDto() {
     }
 
-    public UserDto(long id, String userId, String email) {
-        this.id = id;
+    public UserUpdatedDto(String userId, String email) {
         this.userId = userId;
         this.email = email;
-    }
-
-    public long getId() {
-        return id;
     }
 
     public String getUserId() {
