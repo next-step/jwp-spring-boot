@@ -1,5 +1,7 @@
 package myblog.user.web;
 
+import myblog.user.domain.User;
+import myblog.user.domain.UserRepository;
 import myblog.user.dto.UserCreatedDto;
 import myblog.user.dto.UserDto;
 import org.slf4j.Logger;
@@ -14,19 +16,17 @@ import java.net.URI;
 public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    private UserCreatedDto userCreatedDto;
-
     @PostMapping
     public ResponseEntity<Void> create(@RequestBody UserCreatedDto userCreatedDto) {
         logger.debug("Created User : {}", userCreatedDto);
-        this.userCreatedDto = userCreatedDto;
+        User user = UserRepository.create(userCreatedDto);
         return ResponseEntity
-                .created(URI.create("/users/1"))
+                .created(URI.create("/users/" + user.getId()))
                 .build();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> show(@PathVariable long id) {
-        return ResponseEntity.ok(new UserDto(1, userCreatedDto.getUserId(), userCreatedDto.getEmail()));
+    public ResponseEntity<User> show(@PathVariable int id) {
+        return ResponseEntity.ok(UserRepository.findById(id));
     }
 }
