@@ -2,26 +2,34 @@ package myblog.user.domain;
 
 import myblog.user.dto.UserUpdatedDto;
 
-public class User {
-    private int id;
+import javax.persistence.*;
 
+@Entity
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(unique = true, nullable = false, length = 20)
     private String userId;
 
-    private String email;
-
+    @Column(nullable = false, length = 20)
     private String password;
+
+    @Column(length = 50)
+    private String email;
 
     private User() {
     }
 
-    public User(int id, String userId, String email, String password) {
+    public User(String userId, String password, String email) {
         this.id = id;
         this.userId = userId;
-        this.email = email;
         this.password = password;
+        this.email = email;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

@@ -1,10 +1,12 @@
 package support.web;
 
+import myblog.user.LoginFailedException;
 import myblog.user.domain.User;
-import myblog.user.domain.UserRepository;
 import myblog.user.dto.SessionedUser;
+import myblog.user.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,10 +14,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.nio.charset.Charset;
 import java.util.Base64;
-import java.util.Optional;
 
 public class BasicAuthInterceptor extends HandlerInterceptorAdapter {
     private static final Logger logger = LoggerFactory.getLogger(BasicAuthInterceptor.class);
+
+    @Autowired
+    private UserService userService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -32,12 +36,18 @@ public class BasicAuthInterceptor extends HandlerInterceptorAdapter {
         logger.debug("username : {}", values[0]);
         logger.debug("password : {}", values[1]);
 
-        Optional<User> maybeUser = UserRepository.findByUserId(values[0]);
-        SessionedUser sessionedUser = maybeUser.filter(u -> u.matchPassword(values[1]))
-                .map(u -> new SessionedUser(u.getId(), u.getUserId()))
-                .orElse(SessionedUser.GUEST);
+        SessionedUser sessionedUser = getSessionedUserAfterLogin(values);
         HttpSession session = request.getSession();
         session.setAttribute(SessionedUser.SESSIONED_USER_KEY, sessionedUser);
         return true;
+    }
+
+    private SessionedUser getSessionedUserAfterLogin(String[] values) {
+        try {
+            User user = userService.login(values[0], values[1]);
+            return new SessionedUser(user.getId(), user.getUserId());
+        } catch (LoginFailedException e) {
+            return SessionedUser.GUEST;
+        }
     }
 }

@@ -5,19 +5,19 @@ public class SessionedUser {
 
     public static final SessionedUser GUEST = new GuestUser();
 
-    private int id;
+    private long id;
 
     private String userId;
 
     private SessionedUser() {
     }
 
-    public SessionedUser(int id, String userId) {
+    public SessionedUser(long id, String userId) {
         this.id = id;
         this.userId = userId;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
