@@ -5,7 +5,6 @@ import myblog.user.domain.UserRepository;
 import myblog.user.dto.SessionedUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +14,6 @@ import java.nio.charset.Charset;
 import java.util.Base64;
 import java.util.Optional;
 
-@Component
 public class BasicAuthInterceptor extends HandlerInterceptorAdapter {
     private static final Logger logger = LoggerFactory.getLogger(BasicAuthInterceptor.class);
 
