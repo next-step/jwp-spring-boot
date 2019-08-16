@@ -19,7 +19,6 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-
     public User create(UserCreatedDto createdDto) {
         User user = new User(
                 createdDto.getUserId(),

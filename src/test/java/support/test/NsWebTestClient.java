@@ -66,4 +66,11 @@ public class NsWebTestClient {
     public static NsWebTestClient of(String baseUrl, int port) {
         return new NsWebTestClient(baseUrl, port);
     }
+
+    public static WebTestClient client(int port) {
+        return WebTestClient
+                .bindToServer()
+                .baseUrl(BASE_URL + ":" + port)
+                .build();
+    }
 }

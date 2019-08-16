@@ -19,9 +19,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class UserAcceptanceTest extends AcceptanceTest {
     private static final Logger logger = LoggerFactory.getLogger(UserAcceptanceTest.class);
 
-    @Value("${local.server.port}")
-    private int port;
-
     private NsWebTestClient webClient;
 
     @BeforeEach
