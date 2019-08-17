@@ -17,6 +17,10 @@ public class SessionedUser {
         this.userId = userId;
     }
 
+    public boolean isOwner(long id) {
+        return this.id == id;
+    }
+
     public long getId() {
         return id;
     }

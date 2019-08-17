@@ -25,4 +25,12 @@ public class UserCreatedDto {
     public String getPassword() {
         return password;
     }
+
+    @Override
+    public String toString() {
+        return "UserCreatedDto{" +
+                "userId='" + userId + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

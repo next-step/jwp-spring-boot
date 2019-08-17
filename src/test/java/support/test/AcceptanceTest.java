@@ -7,7 +7,7 @@ import support.NsProfile;
 
 @ActiveProfiles(NsProfile.TEST)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class AcceptanceTest {
+public abstract class AcceptanceTest {
     @Value("${local.server.port}")
     protected int port;
 }

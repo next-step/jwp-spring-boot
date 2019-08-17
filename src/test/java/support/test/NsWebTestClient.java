@@ -1,5 +1,7 @@
 package support.test;
 
+import myblog.user.dto.UserUpdatedDto;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
@@ -41,12 +43,20 @@ public class NsWebTestClient {
     }
 
     public <T> void updateResource(URI location, T body, Class<T> clazz) {
+        updateResource(location.toString(), body, clazz);
+    }
+
+    public <T> void updateResource(String location, T body, Class<T> clazz) {
+        updateResource(location, body, clazz, HttpStatus.OK);
+    }
+
+    public <T> void updateResource(String location, T body, Class<T> clazz, HttpStatus httpStatus) {
         testClientBuilder.build()
                 .put()
                 .uri(location.toString())
                 .body(Mono.just(body), clazz)
                 .exchange()
-                .expectStatus().isOk();
+                .expectStatus().isEqualTo(httpStatus.value());
     }
 
     public <T> T getResource(URI location, Class<T> clazz) {

@@ -19,4 +19,12 @@ public class UserUpdatedDto {
     public String getEmail() {
         return email;
     }
+
+    @Override
+    public String toString() {
+        return "UserUpdatedDto{" +
+                "userId='" + userId + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

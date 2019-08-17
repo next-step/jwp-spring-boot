@@ -1,6 +1,7 @@
 package myblog.user.web;
 
 import myblog.user.domain.User;
+import myblog.user.dto.SessionedUser;
 import myblog.user.dto.UserCreatedDto;
 import myblog.user.dto.UserUpdatedDto;
 import myblog.user.service.UserService;
@@ -8,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import support.web.argumentresolver.LoginUser;
 
 import java.net.URI;
 
@@ -38,10 +40,11 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(
+            @LoginUser SessionedUser loginUser,
             @PathVariable long id,
             @RequestBody UserUpdatedDto userUpdatedDto) {
         logger.debug("Updated User : {}", userUpdatedDto);
-        userService.update(id, userUpdatedDto);
+        userService.update(loginUser, id, userUpdatedDto);
         return ResponseEntity.ok().build();
     }
 }

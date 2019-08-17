@@ -1,6 +1,8 @@
 package myblog.user.domain;
 
+import myblog.user.dto.SessionedUser;
 import myblog.user.dto.UserUpdatedDto;
+import support.security.HasNotPermission;
 
 import javax.persistence.*;
 
@@ -23,6 +25,10 @@ public class User {
     }
 
     public User(String userId, String password, String email) {
+        this(0L, userId, password, email);
+    }
+
+    public User(long id, String userId, String password, String email) {
         this.id = id;
         this.userId = userId;
         this.password = password;
@@ -45,7 +51,11 @@ public class User {
         return password;
     }
 
-    public void update(UserUpdatedDto userUpdatedDto) {
+    public void update(SessionedUser loginUser, UserUpdatedDto userUpdatedDto) {
+        if (!loginUser.isOwner(id)) {
+            throw new HasNotPermission();
+        }
+
         this.userId = userUpdatedDto.getUserId();
         this.email = userUpdatedDto.getEmail();
     }
