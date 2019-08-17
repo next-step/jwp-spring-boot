@@ -23,6 +23,7 @@ public class BasicAuthInterceptor extends HandlerInterceptorAdapter {
         String authorization = request.getHeader("Authorization");
         logger.debug("Authorization : {}", authorization);
         if (authorization == null || !authorization.startsWith("Basic")) {
+            setSessionedUserToSession(request, SessionedUser.GUEST);
             return true;
         }
 
@@ -36,8 +37,12 @@ public class BasicAuthInterceptor extends HandlerInterceptorAdapter {
         SessionedUser sessionedUser = maybeUser.filter(u -> u.matchPassword(values[1]))
                 .map(u -> new SessionedUser(u.getId(), u.getUserId()))
                 .orElse(SessionedUser.GUEST);
+        setSessionedUserToSession(request, sessionedUser);
+        return true;
+    }
+
+    private void setSessionedUserToSession(HttpServletRequest request, SessionedUser sessionedUser) {
         HttpSession session = request.getSession();
         session.setAttribute(SessionedUser.SESSIONED_USER_KEY, sessionedUser);
-        return true;
     }
 }

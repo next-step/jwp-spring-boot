@@ -1,5 +1,6 @@
 package myblog.user.domain;
 
+import myblog.user.dto.SessionedUser;
 import myblog.user.dto.UserCreatedDto;
 import myblog.user.dto.UserUpdatedDto;
 
@@ -11,6 +12,11 @@ public class UserRepository {
     private static List<User> users = new ArrayList<>();
 
     public static User create(UserCreatedDto createdDto) {
+        Optional<User> maybeUser = findByUserId(createdDto.getUserId());
+        if (maybeUser.isPresent()) {
+            return maybeUser.get();
+        }
+
         User user = new User(users.size() + 1,
                 createdDto.getUserId(),
                 createdDto.getEmail(),
@@ -29,9 +35,9 @@ public class UserRepository {
                 .findFirst();
     }
 
-    public static User update(int id, UserUpdatedDto updatedDto) {
+    public static User update(SessionedUser loginUser, int id, UserUpdatedDto updatedDto) {
         User user = findById(id);
-        user.update(updatedDto);
+        user.update(loginUser, updatedDto);
         return user;
     }
 }
