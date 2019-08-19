@@ -16,6 +16,7 @@ public class ResourceNotFoundException extends RuntimeException implements Error
         return ERROR_CODE;
     }
 
+    @Override
     public Object[] getArgs() {
         return new Object[] { resourceType, id };
     }

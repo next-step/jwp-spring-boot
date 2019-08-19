@@ -20,6 +20,7 @@ public class HasNotPermission extends RuntimeException implements ErrorCoded {
         return ERROR_CODE;
     }
 
+    @Override
     public Object[] getArgs() {
         return new Object[] { resourceType, resourceId, accessorId };
     }

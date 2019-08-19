@@ -11,4 +11,9 @@ public class LoginRequiredException extends Exception implements ErrorCoded {
     public String getErrorCode() {
         return ERROR_CODE;
     }
+
+    @Override
+    public Object[] getArgs() {
+        return new Object[0];
+    }
 }
