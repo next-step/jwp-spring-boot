@@ -53,7 +53,7 @@ public class User {
 
     public void update(SessionedUser loginUser, UserUpdatedDto userUpdatedDto) {
         if (!loginUser.isOwner(id)) {
-            throw new HasNotPermission();
+            throw new HasNotPermission("USER", id, loginUser.getId());
         }
 
         this.userId = userUpdatedDto.getUserId();

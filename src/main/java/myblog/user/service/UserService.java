@@ -29,7 +29,7 @@ public class UserService {
     }
 
     public User findById(long id) {
-        return userRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("USER", id));
     }
 
     public void update(SessionedUser loginUser, long id, UserUpdatedDto userUpdatedDto) {
