@@ -25,6 +25,10 @@ public class UserService {
                 createdDto.getUserId(),
                 createdDto.getPassword(),
                 createdDto.getEmail());
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {}
+
         return userRepository.save(user);
     }
 
