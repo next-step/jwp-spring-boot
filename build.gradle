@@ -23,7 +23,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.6.2'
     testImplementation 'org.assertj:assertj-core:3.16.1'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'junit'
+        exclude module: 'junit-vintage-engine'
     }
     testImplementation 'org.springframework.boot:spring-boot-starter-webflux'
 }
