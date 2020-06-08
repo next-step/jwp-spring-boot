@@ -25,7 +25,7 @@ dependencies {
     testImplementation 'org.mockito:mockito-junit-jupiter:3.0.0'
     testImplementation 'org.assertj:assertj-core:3.16.1'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'junit'
+        exclude module: 'junit-vintage-engine'
     }
     testImplementation 'org.springframework.boot:spring-boot-starter-webflux'
 }
