@@ -35,9 +35,9 @@ public class UserControllerTest {
         UserCreatedDto expected = new UserCreatedDto("javajigi", "javajigi@nextstep.camp", "password");
         MvcResult createRequest = mockMvc.perform(
                 post("/users")
-                .content(asJsonString(expected))
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(MediaType.APPLICATION_JSON_UTF8))
+                    .content(asJsonString(expected))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andReturn();
@@ -47,8 +47,8 @@ public class UserControllerTest {
 
         mockMvc.perform(
                 get(location)
-                        .contentType(MediaType.APPLICATION_JSON_UTF8)
-                        .accept(MediaType.APPLICATION_JSON_UTF8))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.userId", is(expected.getUserId())))
