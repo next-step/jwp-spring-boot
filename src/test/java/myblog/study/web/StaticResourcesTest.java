@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.CacheControl;
+import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import support.version.BlogVersion;
@@ -66,10 +67,36 @@ public class StaticResourcesTest {
                     .expectBody(String.class)
                         .returnResult();
 
-        String etag = response
-                .getResponseHeaders()
-                .getETag();
-
+        String etag = response.getResponseHeaders().getETag();
         assertThat(etag).isNull();
+    }
+
+    @Test
+    void cors() {
+        EntityExchangeResult<String> crosResponse = client
+                    .get()
+                    .uri("/helloworld")
+                    .header(HttpHeaders.ORIGIN, "https://edu.nextstep.camp")
+                .exchange()
+                    .expectStatus()
+                        .isOk()
+                .expectBody(String.class)
+                    .returnResult();
+
+        assertThat(crosResponse.getResponseHeaders().getAccessControlAllowOrigin())
+                .isEqualTo("https://edu.nextstep.camp");
+
+        String jsUrl = PREFIX_STATIC_RESOURCES + "/" + version.getVersion() + "/js/index.js";
+        EntityExchangeResult<String> nocrosResponse = client
+                .get()
+                    .uri(jsUrl)
+                    .header(HttpHeaders.ORIGIN, "https://edu.nextstep.camp")
+                .exchange()
+                    .expectStatus()
+                    .isOk()
+                .expectBody(String.class)
+                    .returnResult();
+
+        assertThat(nocrosResponse.getResponseHeaders().getAccessControlAllowOrigin()).isNull();
     }
 }
