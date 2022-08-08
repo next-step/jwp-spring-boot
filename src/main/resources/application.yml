@@ -1,9 +1,9 @@
 server:
   tomcat:
-    accept-count: 1
+    accept-count: 100
     threads:
-      max: 1
-    max-connections: 2
+      max: 200
+    max-connections: 8192
 
 handlebars:
   suffix: .html
