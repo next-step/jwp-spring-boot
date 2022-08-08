@@ -22,11 +22,10 @@ public class ExecutorsTest {
 
         StopWatch sw = new StopWatch();
         sw.start();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 100; i++) {
             es.execute(() -> {
                 int idx = counter.addAndGet(1);
-                String result = restTemplate.getForObject("http://localhost:8080/sleep", String.class);
-                logger.info("{}번째 Result: {}", idx, result);
+                restTemplate.getForObject("http://localhost:8080/sleep", String.class);
             });
         }
         sw.stop();

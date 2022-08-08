@@ -8,6 +8,6 @@ public class SleepController {
     @GetMapping("/sleep")
     public String sleep() throws InterruptedException {
         Thread.sleep(500);
-        return "Good Sleep!!";
+        return "잘 잤다.";
     }
 }

@@ -30,15 +30,15 @@ public class StaticResourcesTest {
     void get_static_resources() {
         String uri = PREFIX_STATIC_RESOURCES + "/" + version.getVersion() + "/js/index.js";
         EntityExchangeResult<String> response = client
-                    .get()
-                    .uri(uri)
+                .get()
+                .uri(uri)
                 .exchange()
-                    .expectStatus()
-                        .isOk()
-                    .expectHeader()
-                        .cacheControl(CacheControl.maxAge(60 * 60 * 24 * 365, TimeUnit.SECONDS))
-                    .expectBody(String.class)
-                        .returnResult();
+                .expectStatus()
+                .isOk()
+                .expectHeader()
+                .cacheControl(CacheControl.maxAge(60 * 60 * 24 * 365, TimeUnit.SECONDS))
+                .expectBody(String.class)
+                .returnResult();
 
         logger.debug("body : {}", response.getResponseBody());
 
@@ -46,26 +46,26 @@ public class StaticResourcesTest {
                 .getETag();
 
         client
-                    .get()
-                    .uri(uri)
-                    .header("If-None-Match", etag)
+                .get()
+                .uri(uri)
+                .header("If-None-Match", etag)
                 .exchange()
-                    .expectStatus()
-                        .isNotModified();
+                .expectStatus()
+                .isNotModified();
     }
 
     @Test
     void helloworld() {
         EntityExchangeResult<String> response = client
-                    .get()
-                    .uri("/helloworld")
+                .get()
+                .uri("/helloworld")
                 .exchange()
-                    .expectStatus()
-                        .isOk()
-                    .expectHeader()
-                        .cacheControl(CacheControl.empty())
-                    .expectBody(String.class)
-                        .returnResult();
+                .expectStatus()
+                .isOk()
+                .expectHeader()
+                .cacheControl(CacheControl.empty())
+                .expectBody(String.class)
+                .returnResult();
 
         String etag = response.getResponseHeaders().getETag();
         assertThat(etag).isNull();
@@ -74,14 +74,14 @@ public class StaticResourcesTest {
     @Test
     void cors() {
         EntityExchangeResult<String> crosResponse = client
-                    .get()
-                    .uri("/helloworld")
-                    .header(HttpHeaders.ORIGIN, "https://edu.nextstep.camp")
+                .get()
+                .uri("/helloworld")
+                .header(HttpHeaders.ORIGIN, "https://edu.nextstep.camp")
                 .exchange()
-                    .expectStatus()
-                        .isOk()
+                .expectStatus()
+                .isOk()
                 .expectBody(String.class)
-                    .returnResult();
+                .returnResult();
 
         assertThat(crosResponse.getResponseHeaders().getAccessControlAllowOrigin())
                 .isEqualTo("https://edu.nextstep.camp");
@@ -89,13 +89,13 @@ public class StaticResourcesTest {
         String jsUrl = PREFIX_STATIC_RESOURCES + "/" + version.getVersion() + "/js/index.js";
         EntityExchangeResult<String> nocrosResponse = client
                 .get()
-                    .uri(jsUrl)
-                    .header(HttpHeaders.ORIGIN, "https://edu.nextstep.camp")
+                .uri(jsUrl)
+                .header(HttpHeaders.ORIGIN, "https://edu.nextstep.camp")
                 .exchange()
-                    .expectStatus()
-                    .isOk()
+                .expectStatus()
+                .isOk()
                 .expectBody(String.class)
-                    .returnResult();
+                .returnResult();
 
         assertThat(nocrosResponse.getResponseHeaders().getAccessControlAllowOrigin()).isNull();
     }
