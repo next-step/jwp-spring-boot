@@ -8,6 +8,8 @@
 
     <logger name="myblog" level="DEBUG"/>
 
+    <logger name="com.zaxxer.hikari" level="DEBUG"/>
+
     <logger name="support" level="DEBUG"/>
 
     <root level="INFO">

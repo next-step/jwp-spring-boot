@@ -1,5 +1,9 @@
 package myblog.user.service;
 
+import myblog.audit.domain.Audit;
+import myblog.audit.domain.EventType;
+import myblog.audit.service.AuditService;
+import org.springframework.transaction.annotation.Transactional;
 import support.ResourceNotFoundException;
 import myblog.user.LoginFailedException;
 import myblog.user.domain.User;
@@ -9,15 +13,16 @@ import myblog.user.dto.UserCreatedDto;
 import myblog.user.dto.UserUpdatedDto;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-
 @Service
 @Transactional
 public class UserService {
     private UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    private AuditService auditService;
+
+    public UserService(UserRepository userRepository, AuditService auditService) {
         this.userRepository = userRepository;
+        this.auditService = auditService;
     }
 
     public User create(UserCreatedDto createdDto) {
@@ -38,8 +43,10 @@ public class UserService {
     }
 
     public User login(String userId, String password) {
-        return userRepository.findByUserId(userId)
+        User user = userRepository.findByUserId(userId)
                 .filter(u -> u.matchPassword(password))
-                .orElseThrow(LoginFailedException::new);
+                .orElse(null);
+        auditService.auditEvent(new Audit(EventType.LOGIN));
+        return user;
     }
 }
